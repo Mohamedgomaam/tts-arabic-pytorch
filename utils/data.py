@@ -6,6 +6,7 @@ import torch
 import torchaudio
 import numpy as np
 from torch.utils.data import Dataset
+import librosa
 
 from utils import read_lines_from_file, progbar
 from utils.audio import MelSpectrogram
@@ -235,8 +236,18 @@ class ArabDataset4FastPitch(Dataset):
         phonemes, fpath, pitch_mel = self.data[idx]
 
         wave, sr = torchaudio.load(fpath)
+        wav, sr = librosa.load(fpath, sr=self.sr_target)
+        original_shape = np.shape(wav)[0]
+        
         if sr != self.sr_target:
             wave = torchaudio.functional.resample(wave, sr, self.sr_target, 64)
+        
+        if wave.shape[1] < original_shape:
+          pad_amount = original_shape - wave.shape[1]
+          wave = torch.nn.functional.pad(wave, (0, pad_amount))  # Pad at the end
+        elif wave.shape[1] > original_shape:
+          wave = wave[:, :original_shape]  # Truncate the extra samples
+    
 
         mel_raw = self.mel_fn(wave)
         mel_log = mel_raw.clamp_min(1e-5).log().squeeze()

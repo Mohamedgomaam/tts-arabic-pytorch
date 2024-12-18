@@ -11,7 +11,7 @@ from utils import write_lines_to_file
 
 # %% CONFIG
 
-wavs_path = 'G:/data/arabic-speech-corpus/wav_new'
+wavs_path = '/content/drive/MyDrive/final_speech_dataset/audio_5sec_mo2atan'
 
 waves = [f.path for f in os.scandir(wavs_path) if f.path.endswith('.wav')]
 print(f"{len(waves)} wave files found at {wavs_path}")
@@ -24,12 +24,14 @@ pitch_dict = {}
 
 for i, wav_path in tqdm(enumerate(waves), total=len(waves)):
     wav, sr = librosa.load(wav_path, sr=mel_trf.sample_rate)
-
+  
     wav_name = os.path.basename(wav_path)
+    x=wav_name.split('.')
+    n=str(x[0]).zfill(4)
+    wav_name="ARA NORM  "+n+".wav"
     if wav_name in pitch_dict:
         continue
     mel_spec = mel_trf(torch.tensor(wav)[None])[0] # [mel_bands, T]
-
     # estimate pitch
     pitch_mel, voiced_flag, voiced_probs = librosa.pyin(
         wav, sr=mel_trf.sample_rate,
