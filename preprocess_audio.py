@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 # %%
 
-wav_path = '/content/drive/MyDrive/final_speech_dataset/audio_5sec_mo2atan'
+wav_path = '/content/drive/MyDrive/final_speech_dataset/audio_5sec'
 wav_new_path = './data/arabic-speech-corpus/train/wav_new'
 
 sr_target = 22050

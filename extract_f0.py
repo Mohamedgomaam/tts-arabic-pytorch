@@ -11,7 +11,7 @@ from utils import write_lines_to_file
 
 # %% CONFIG
 
-wavs_path = '/content/drive/MyDrive/final_speech_dataset/audio_5sec_mo2atan'
+wavs_path = '/content/drive/MyDrive/final_speech_dataset/audio_5sec'
 
 waves = [f.path for f in os.scandir(wavs_path) if f.path.endswith('.wav')]
 print(f"{len(waves)} wave files found at {wavs_path}")
